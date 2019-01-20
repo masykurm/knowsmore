@@ -1,3 +1,2 @@
 # no binaries
-**/*.go
 !.gitignore
