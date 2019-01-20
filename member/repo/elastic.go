@@ -13,11 +13,17 @@ import (
 
 type elasticMemberRepo struct {
 	Client *elastic.Client
+	Index  string
+	Type   string
 }
 
 // NewElasticMemberRepository will create an implementation of member.Repository
-func NewElasticMemberRepository(client *elastic.Client) member.Repository {
-	return &elasticMemberRepo{client}
+func NewElasticMemberRepository(client *elastic.Client, index, types string) member.Repository {
+	return &elasticMemberRepo{
+		Client: client,
+		Index:  index,
+		Type:   types,
+	}
 }
 
 func (e *elasticMemberRepo) GetByID(ctx context.Context, id string) (member m.Member, err error) {
@@ -26,9 +32,9 @@ func (e *elasticMemberRepo) GetByID(ctx context.Context, id string) (member m.Me
 }
 
 func (e *elasticMemberRepo) GetByAutocomplete(ctx context.Context, keyword string) (members []m.Member, err error) {
-	tagSuggester := elastic.NewCompletionSuggester("data").Text("r").Field("suggest").Size(10)
-	searchSource := elastic.NewSearchSource().Suggester(tagSuggester)
-	searchResult, err := e.Client.Search().Index("member").Type("_doc").SearchSource(searchSource).Do(ctx)
+	searchSuggester := elastic.NewCompletionSuggester("data").Text(keyword).Field("suggest").Size(10)
+	searchSource := elastic.NewSearchSource().Suggester(searchSuggester)
+	searchResult, err := e.Client.Search().Index(e.Index).Type(e.Type).SearchSource(searchSource).Do(ctx)
 	for _, ops := range searchResult.Suggest["data"] {
 		for _, op := range ops.Options {
 			var member m.Member

@@ -16,6 +16,6 @@ func main() {
 		log.Panic(err)
 	}
 
-	eRepo := repo.NewElasticMemberRepository(client)
+	eRepo := repo.NewElasticMemberRepository(client, "member", "_doc")
 	eRepo.GetByAutocomplete(context.Background(), "r")
 }
