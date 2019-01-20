@@ -26,17 +26,16 @@ func NewElasticMemberRepository(client *elastic.Client, index, types string) mem
 	}
 }
 
-func (e *elasticMemberRepo) GetByID(ctx context.Context, id string) (member m.Member, err error) {
-	log.Panic("GetByID method has not implemented yet")
-	return
-}
-
 func (e *elasticMemberRepo) GetByAutocomplete(ctx context.Context, keyword string) (members []m.Member, err error) {
+	members = []m.Member{}
 	searchSuggester := elastic.NewCompletionSuggester("data").Text(keyword).Field("suggest").Size(10)
 	searchSource := elastic.NewSearchSource().Suggester(searchSuggester)
 	searchResult, err := e.Client.Search().Index(e.Index).Type(e.Type).SearchSource(searchSource).Do(ctx)
 	for _, ops := range searchResult.Suggest["data"] {
 		for _, op := range ops.Options {
+			if op.Source == nil {
+				continue
+			}
 			var member m.Member
 			err := json.Unmarshal(*op.Source, &member)
 			if err != nil {
