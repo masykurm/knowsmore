@@ -1,12 +1,15 @@
 package main
 
 import (
-	"context"
 	"log"
+	"time"
 
 	"gopkg.in/olivere/elastic.v5"
 
+	"github.com/labstack/echo"
+	"github.com/robertotambunan/knowsmore/member/api"
 	"github.com/robertotambunan/knowsmore/member/repo"
+	"github.com/robertotambunan/knowsmore/member/usecase"
 )
 
 func main() {
@@ -16,6 +19,11 @@ func main() {
 		log.Panic(err)
 	}
 
-	eRepo := repo.NewElasticMemberRepository(client, "member", "_doc")
-	eRepo.GetByAutocomplete(context.Background(), "r")
+	e := echo.New()
+
+	mElasticRepo := repo.NewElasticMemberRepository(client, "member", "_doc")
+	mUsecase := usecase.NewMemberUsecase(mElasticRepo, 100*time.Millisecond)
+
+	api.NewMemberHTTPtpHandler(e, mUsecase)
+	e.Start(":9002")
 }
