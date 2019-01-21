@@ -10,9 +10,9 @@ you can open this url to install [golang 1.10](https://www.admfactory.com/how-to
 
 * Install your elastic node, you can install in your local or just using docker
 
-follow these steps for install in your [ubuntu](https://www.elastic.co/guide/en/beats/libbeat/5.6/elasticsearch-installation.html)
+follow these steps to install in your [ubuntu](https://www.elastic.co/guide/en/beats/libbeat/5.6/elasticsearch-installation.html)
 
-follow these steps for install in your [docker](https://www.elastic.co/guide/en/elasticsearch/reference/5.6/docker.html)
+follow these steps to install in your [docker](https://www.elastic.co/guide/en/elasticsearch/reference/5.6/docker.html)
 
 * Create mapping for your elastic index
 
