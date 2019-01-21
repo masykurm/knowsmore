@@ -1,5 +1,5 @@
 # Knowsmore
-Simple Autocomplete Engine using go ft Elasticsearcg
+Simple Autocomplete Engine using go ft Elasticsearch
 
 ## Preparation
 Please follow these steps to prepare elasticsearch and golang:
