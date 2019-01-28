@@ -34,3 +34,8 @@ func (mu *memberUsecase) GetByAutocomplete(ctx context.Context, keyword string) 
 
 	return
 }
+
+// CheckBlacklistedKeyword TODO
+func (mu *memberUsecase) CheckBlacklistedKeyword(context.Context, string) (m.Response, error) {
+	return m.Response{}, nil
+}
